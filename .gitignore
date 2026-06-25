@@ -1,0 +1,44 @@
+# Environment & Secrets
+.env
+*.env
+.env.*
+!*.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.npm/
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hermes agent plans (local only)
+.hermes/
+
+# Backend specific
+backend/app/__pycache__/
+
+# SQL migration files are project artifacts, keep them
+# !migration_v2.sql
+# !fix_scenario_prompt.sql
+# !setup_org.sql
