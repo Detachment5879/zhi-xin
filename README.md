@@ -122,62 +122,45 @@
 
 ---
 
-## 部署指南
+## 快速运行
 
-> ⚠️ **必须先部署后端，再部署前端**。前端构建时需要后端地址。
+> 🏠 **纯本地运行，不需要部署。** 适用于答辩演示、课堂展示、开发调试。
 
-### 第一步：部署后端到 Render
+### 你需要准备
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Detachment5879/zhi-xin)
+| 东西 | 说明 | 要不要钱 |
+|------|------|----------|
+| Python 3.10+ | 跑后端 | 免费 |
+| Node.js 18+ | 跑前端 | 免费 |
+| Supabase 账号 | 云数据库，[免费注册](https://supabase.com) | 免费（500MB） |
+| DeepSeek API Key | 调用大模型，[免费注册](https://platform.deepseek.com) | 新用户送额度 |
 
-1. 点击上方按钮，Render 会自动读取 `render.yaml`
-2. 填写环境变量（Supabase 密钥 + LLM API Key）
-3. 等待部署完成（约 3-5 分钟）
-4. 复制生成的地址，如 `https://zhixin-api.onrender.com`
+### 三步跑起来
 
-验证：访问 `https://你的地址/docs` 查看 API 文档
+**第一步：初始化数据库（2分钟）**
 
-### 第二步：部署前端到 Vercel
+1. 打开你的 Supabase 项目 → SQL Editor
+2. 依次执行仓库里的三个 SQL 文件：
+   - `migration_v2.sql` → 建表 + 案例种子数据
+   - `setup_org.sql` → 学院/专业/班级
+   - `fix_scenario_prompt.sql` → 完善案例内容
+3. 每次看到 "Success" 就下一步
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Detachment5879/zhi-xin&root-directory=frontend)
-
-1. 点击上方按钮，Vercel 会引导你导入仓库
-2. **在环境变量设置页面，填入：**
-   - `BACKEND_URL` = 第一步复制的 Render 地址（如 `https://zhixin-api.onrender.com`）
-3. 点击 Deploy，等待构建完成（约 2-3 分钟）
-
-> 💡 如果忘记设置 BACKEND_URL，部署后前端 API 请求会失败。去 Vercel 项目 Settings → Environment Variables 添加后重新部署即可。
-
----
-
-## 本地开发
-
-### 环境要求
-
-- Python 3.10+
-- Node.js 18+
-- Supabase 项目（免费套餐即可）
-
-### 1. 克隆仓库
-
-```bash
-git clone https://github.com/Detachment5879/zhi-xin.git
-cd zhi-xin
-```
-
-### 2. 启动后端
+**第二步：启动后端（2分钟）**
 
 ```bash
 cd backend
 cp .env.example .env
-# 编辑 .env 填入你的 Supabase 密钥和 LLM API Key
+# 编辑 .env，填入你的 Supabase 密钥和 DeepSeek API Key
 pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-API 文档自动生成：http://localhost:8000/docs
+验证：浏览器打开 http://localhost:8000/docs → 看到 Swagger API 文档 ✅
 
-### 3. 启动前端
+**第三步：启动前端（2分钟）**
+
+新开一个终端：
 
 ```bash
 cd frontend
@@ -185,14 +168,7 @@ npm install
 npm run dev
 ```
 
-访问：http://localhost:3000
-
-### 4. 初始化数据库
-
-在 Supabase SQL Editor 中依次执行：
-1. `migration_v2.sql` — 建表 + 种子数据
-2. `setup_org.sql` — 组织架构
-3. `fix_scenario_prompt.sql` — 案例内容修复（如有）
+浏览器打开 http://localhost:3000 → 看到知薪首页 ✅
 
 ---
 
@@ -212,11 +188,7 @@ npm run dev
 | `PASS_THRESHOLD` | 通过阈值 | `0.80` |
 | `MAX_CYCLES` | 最大循环次数 | `2` |
 
-### 前端 (Vercel 环境变量)
-
-| 变量 | 说明 |
-|------|------|
-| `BACKEND_URL` | 后端 Render 地址，如 `https://zhixin-api.onrender.com` |
+> 本地开发时前端通过 `next.config.js` 的代理将 `/api/*` 转发到 `http://localhost:8000`，无需额外配置。
 
 ---
 
@@ -287,7 +259,7 @@ zhi-xin/
 | 数据库 | Supabase (PostgreSQL) | 托管数据库 + REST API + RLS |
 | LLM 网关 | 可插拔（DeepSeek/Spark/OpenAI/Groq） | OpenAI 兼容接口，一套代码多模型 |
 | 流式输出 | SSE (Server-Sent Events) | 实时推送 AI 生成内容，无需 WebSocket |
-| 部署 | Render + Vercel | 免费套餐即可，一键部署 |
+| 部署 | 本地运行（无需部署平台） | 答辩投屏演示，零成本 |
 | 容器化 | Docker + docker-compose | 环境一致性 |
 
 ---
