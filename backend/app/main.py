@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api import health, review, llm, diagnostic, cycle, profile, records, chat, knowledge, progress, teacher, org, feynman, case_study, review_reminder
 from app.config import settings
 
@@ -8,6 +9,15 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+)
+
+# CORS — 允许 Vercel 前端和本地开发访问
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 部署后可以限制为具体域名
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # 注册路由
