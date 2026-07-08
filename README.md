@@ -122,19 +122,31 @@
 
 ---
 
-## 一键部署
+## 部署指南
 
-### 后端 → Render
+> ⚠️ **必须先部署后端，再部署前端**。前端构建时需要后端地址。
+
+### 第一步：部署后端到 Render
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Detachment5879/zhi-xin)
 
-点击按钮后设置环境变量即可，`render.yaml` 已配置好。
+1. 点击上方按钮，Render 会自动读取 `render.yaml`
+2. 填写环境变量（Supabase 密钥 + LLM API Key）
+3. 等待部署完成（约 3-5 分钟）
+4. 复制生成的地址，如 `https://zhixin-api.onrender.com`
 
-### 前端 → Vercel
+验证：访问 `https://你的地址/docs` 查看 API 文档
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Detachment5879/zhi-xin&root-directory=frontend)
+### 第二步：部署前端到 Vercel
 
-部署后设置 `BACKEND_URL` 指向上一步的 Render 地址。
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Detachment5879/zhi-xin&root-directory=frontend)
+
+1. 点击上方按钮，Vercel 会引导你导入仓库
+2. **在环境变量设置页面，填入：**
+   - `BACKEND_URL` = 第一步复制的 Render 地址（如 `https://zhixin-api.onrender.com`）
+3. 点击 Deploy，等待构建完成（约 2-3 分钟）
+
+> 💡 如果忘记设置 BACKEND_URL，部署后前端 API 请求会失败。去 Vercel 项目 Settings → Environment Variables 添加后重新部署即可。
 
 ---
 
