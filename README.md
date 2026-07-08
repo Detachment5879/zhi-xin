@@ -271,9 +271,11 @@ zhi-xin/
 
 ---
 
-## 相关仓库
+## 相关文档
 
-- [kstar-learning-agent](https://github.com/Detachment5879/kstar-learning-agent) — Streamlit 原型，含完整的 KSTAR 循环验证和设计文档
+- [架构设计](docs/architecture.md) — KSTAR 循环 × 多智能体架构详解
+- [设计方案](docs/design.md) — 技术设计（含熔断机制与成本策略）
+- [流程图](docs/flow_diagram.md) — 完整资源生成流程
 
 ---
 
