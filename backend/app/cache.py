@@ -1,4 +1,4 @@
-"""简易内存缓存 — 减少重复的 Supabase 查询"""
+"""简易内存缓存 — 减少重复的数据库查询"""
 import time
 from typing import Any
 

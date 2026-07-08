@@ -1,10 +1,11 @@
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
-    # Supabase
-    supabase_url: str
-    supabase_service_key: str
-    supabase_anon_key: str
+    # 数据库（SQLite 本地文件，无需配置）
+    supabase_url: str = ""
+    supabase_service_key: str = ""
+    supabase_anon_key: str = ""
 
     # LLM
     llm_provider: str = "deepseek"
@@ -25,5 +26,6 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+
 
 settings = Settings()

@@ -1,34 +1,21 @@
-import httpx
+"""健康检查 — 验证数据库连接"""
 from fastapi import APIRouter
-from app.config import settings
+from app.database import _get_conn
 
 router = APIRouter(prefix="/api", tags=["系统"])
 
-HEADERS = {
-    "apikey": settings.supabase_service_key,
-    "Authorization": f"Bearer {settings.supabase_service_key}",
-    "Content-Type": "application/json",
-}
 
 @router.get("/health")
 async def health_check():
-    """健康检查 - 验证数据库连接"""
+    """健康检查 - 验证本地 SQLite 数据库"""
     try:
-        async with httpx.AsyncClient() as client:
-            r = await client.get(
-                f"{settings.supabase_url}/rest/v1/courses?limit=1",
-                headers=HEADERS,
-            )
-            if r.status_code == 200:
-                return {
-                    "status": "ok",
-                    "database": "connected",
-                    "tables_accessible": True,
-                }
-            else:
-                return {
-                    "status": "error",
-                    "database": f"HTTP {r.status_code}: {r.text[:200]}",
-                }
+        conn = _get_conn()
+        row = conn.execute("SELECT COUNT(*) as cnt FROM sqlite_master WHERE type='table'").fetchone()
+        table_count = row["cnt"] if row else 0
+        return {
+            "status": "ok",
+            "database": "sqlite",
+            "tables": table_count,
+        }
     except Exception as e:
         return {"status": "error", "database": str(e)}

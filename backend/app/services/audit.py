@@ -68,24 +68,3 @@ class AuditContext:
             session_id=self.session_id,
             student_id=self.student_id,
         )
-
-
-async def ensure_audit_table():
-    """创建审计日志表（如果不存在）"""
-    from app.config import settings
-    import httpx
-    h = {
-        "apikey": settings.supabase_service_key,
-        "Authorization": f"Bearer {settings.supabase_service_key}",
-        "Content-Type": "application/json",
-    }
-    # 注意：DDL 不能通过 REST API 执行，需要在 SQL Editor 手动创建
-    # CREATE TABLE IF NOT EXISTS audit_logs (
-    #     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    #     agent_name TEXT, phase TEXT,
-    #     input_summary TEXT, output_summary TEXT,
-    #     llm_model TEXT, duration_ms FLOAT,
-    #     error TEXT, session_id UUID, student_id UUID,
-    #     created_at TIMESTAMPTZ DEFAULT now()
-    # );
-    pass

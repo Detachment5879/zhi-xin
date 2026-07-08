@@ -124,7 +124,7 @@
 
 ## 快速运行
 
-> 🏠 **纯本地运行，不需要部署。** 适用于答辩演示、课堂展示、开发调试。
+> 🏠 **纯本地运行，零外部数据库依赖。** 适用于答辩演示、课堂展示、开发调试。
 
 ### 你需要准备
 
@@ -132,33 +132,25 @@
 |------|------|----------|
 | Python 3.10+ | 跑后端 | 免费 |
 | Node.js 18+ | 跑前端 | 免费 |
-| Supabase 账号 | 云数据库，[免费注册](https://supabase.com) | 免费（500MB） |
 | DeepSeek API Key | 调用大模型，[免费注册](https://platform.deepseek.com) | 新用户送额度 |
 
-### 三步跑起来
+### 两步跑起来
 
-**第一步：初始化数据库（2分钟）**
-
-1. 打开你的 Supabase 项目 → SQL Editor
-2. 依次执行仓库里的三个 SQL 文件：
-   - `migration_v2.sql` → 建表 + 案例种子数据
-   - `setup_org.sql` → 学院/专业/班级
-   - `fix_scenario_prompt.sql` → 完善案例内容
-3. 每次看到 "Success" 就下一步
-
-**第二步：启动后端（2分钟）**
+**第一步：启动后端（2分钟）**
 
 ```bash
 cd backend
 cp .env.example .env
-# 编辑 .env，填入你的 Supabase 密钥和 DeepSeek API Key
+# 编辑 .env，填入你的 DeepSeek API Key
 pip install -r requirements.txt
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
+> 💡 数据库自动创建为 `backend/data/zhixin.db`（SQLite），首次启动自动建表 + 导入种子数据。
+
 验证：浏览器打开 http://localhost:8000/docs → 看到 Swagger API 文档 ✅
 
-**第三步：启动前端（2分钟）**
+**第二步：启动前端（2分钟）**
 
 新开一个终端：
 
@@ -178,9 +170,6 @@ npm run dev
 
 | 变量 | 说明 | 示例 |
 |------|------|------|
-| `SUPABASE_URL` | Supabase 项目地址 | `https://xxx.supabase.co` |
-| `SUPABASE_SERVICE_KEY` | Service Role Key | `eyJ...` |
-| `SUPABASE_ANON_KEY` | Anon Key | `eyJ...` |
 | `LLM_PROVIDER` | LLM 提供商 | `deepseek` / `spark` / `openai` / `groq` |
 | `LLM_MODEL` | 模型名 | `deepseek-chat` / `deepseek-reasoner` |
 | `LLM_API_KEY` | API 密钥 | `sk-...` |
@@ -188,7 +177,7 @@ npm run dev
 | `PASS_THRESHOLD` | 通过阈值 | `0.80` |
 | `MAX_CYCLES` | 最大循环次数 | `2` |
 
-> 本地开发时前端通过 `next.config.js` 的代理将 `/api/*` 转发到 `http://localhost:8000`，无需额外配置。
+> 数据库已本地化，无需任何 Supabase 配置。前端通过 `next.config.js` 代理自动转发到后端。
 
 ---
 
@@ -256,7 +245,7 @@ zhi-xin/
 | 前端框架 | Next.js 15 (App Router) | SSR + 静态生成，SEO 友好 |
 | UI 框架 | Tailwind CSS + Lucide Icons | 原子化 CSS，快速迭代 |
 | 后端框架 | FastAPI | 异步高性能，自动 API 文档 |
-| 数据库 | Supabase (PostgreSQL) | 托管数据库 + REST API + RLS |
+| 数据库 | SQLite（本地文件） | 零配置，自动建表，无需外部服务 |
 | LLM 网关 | 可插拔（DeepSeek/Spark/OpenAI/Groq） | OpenAI 兼容接口，一套代码多模型 |
 | 流式输出 | SSE (Server-Sent Events) | 实时推送 AI 生成内容，无需 WebSocket |
 | 部署 | 本地运行（无需部署平台） | 答辩投屏演示，零成本 |

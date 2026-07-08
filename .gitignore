@@ -35,6 +35,12 @@ Thumbs.db
 # Hermes agent plans (local only)
 .hermes/
 
+# SQLite database (auto-generated, local only)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
 # Backend specific
 backend/app/__pycache__/
 
