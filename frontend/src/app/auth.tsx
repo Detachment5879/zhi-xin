@@ -15,20 +15,17 @@ export default function AuthPage({ onLogin }: AuthPageProps) {
   const [error, setError] = useState('');
   const [role, setRole] = useState<'student' | 'teacher'>('student');
 
-  const auth = async (path: string, body: any) => {
-    const res = await fetch(`https://ssmgmyleybvrjtecgghv.supabase.co/auth/v1/${path}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzbWdteWxleWJ2cmp0ZWNnZ2h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNDEzOTYsImV4cCI6MjA5NzcxNzM5Nn0.2QVTXXdFcWCEQsLMaBEYK4YN7avdpkhEPyb1OlPzfdY',
-      },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      const e = await res.json();
-      throw new Error(e.msg || e.message || '认证失败');
+  const auth = async (_path: string, body: any) => {
+    // 本地模式：模拟认证，直接放行
+    // 生产环境可替换为真实认证（Supabase Auth / NextAuth 等）
+    await new Promise(r => setTimeout(r, 300)); // 模拟网络延迟
+    if (!body.email || !body.password) {
+      throw new Error('请输入邮箱和密码');
     }
-    return res.json();
+    if (body.password.length < 3) {
+      throw new Error('密码至少3位');
+    }
+    return { user: { email: body.email } };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
